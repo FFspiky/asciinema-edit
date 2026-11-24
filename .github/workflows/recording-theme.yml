@@ -1,0 +1,26 @@
+name: Recording theme on the original Go toolchain
+on:
+  push:
+    branches: [ci/recording-theme-go110]
+permissions:
+  contents: read
+jobs:
+  go110:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 610f641768b49dd1382a64ad6fe20327a4a36514
+          path: gopath/src/github.com/cirocosta/asciinema-edit
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.10.8'
+          cache: false
+      - name: Test and build the editor
+        working-directory: gopath/src/github.com/cirocosta/asciinema-edit
+        env:
+          GOPATH: ${{ github.workspace }}/gopath
+        run: |
+          go version
+          go test ./...
+          go build ./...
